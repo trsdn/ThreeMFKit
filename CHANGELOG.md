@@ -4,6 +4,18 @@ All notable changes to this package are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] — 2026-08-28
+
+### Fixed
+
+- The target declared `.unsafeFlags(["-application-extension"])`. SwiftPM refuses to resolve a
+  package that uses unsafe flags when it is depended on by version from a remote repository, so
+  every consumer outside this repository failed to build with *"cannot be used as a dependency of
+  this target because it uses unsafe build flags"*. It only ever worked because the package was a
+  local path dependency. The guarantee has not been dropped: CI now builds with
+  `-Xswiftc -application-extension`, and the consuming extension targets already set
+  `APPLICATION_EXTENSION_API_ONLY`.
+
 ## [1.0.0] — 2026-08-28
 
 First standalone release.

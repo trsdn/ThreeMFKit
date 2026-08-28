@@ -60,8 +60,8 @@ extractor.preview(for: url, maxPixelDimension: 512)
 
 ## Use in app extensions
 
-The module is compiled with `-application-extension`, so it stays inside the API surface an app
-extension may link. It is consumed that way by
+The module is verified against the API surface an app extension may link -- CI builds it with
+`-Xswiftc -application-extension`. It is consumed that way by
 [3MF Quick Look](https://github.com/trsdn/threemf-quicklook), which runs it inside Finder's preview
 and thumbnail extensions.
 

@@ -32,8 +32,10 @@ GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.bareRepository GIT_CONFIG_VALUE_0=all s
 - **When writing a test fixture, `addEntry` stores uncompressed by default.** A "decompression
   bomb" fixture built without `compressionMethod: .deflate` is not compressed at all and proves
   nothing. `EntrySizeLimitTests` asserts the fixture really is compressed for this reason.
-- **The module must stay extension-safe.** It is compiled with `-application-extension`. An API
-  that is unavailable to app extensions will fail to build for consumers even if it builds here.
+- **The module must stay extension-safe.** CI builds it with `-Xswiftc -application-extension`.
+  Do not move this back into `Package.swift` as `.unsafeFlags` -- SwiftPM refuses to resolve a
+  package using unsafe flags when it is depended on by version, which makes the package unusable
+  by every consumer outside this repository.
 - **The README example is compiled.** `READMEExampleTests` mirrors it, so renaming a public symbol
   means updating the README in the same change.
 

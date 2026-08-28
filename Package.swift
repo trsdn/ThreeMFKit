@@ -20,14 +20,17 @@ let package = Package(
         .package(url: "https://github.com/weichsel/ZIPFoundation.git", from: "0.9.19")
     ],
     targets: [
+        // The module must stay within the API surface an app extension may link, because it is
+        // consumed by Quick Look preview and thumbnail extensions. That used to be enforced with
+        // .unsafeFlags(["-application-extension"]), which SwiftPM refuses to allow in a package
+        // consumed by version from a remote repository -- it only worked while this was a local
+        // path dependency, and it silently blocked the split into its own repository.
+        //
+        // The guarantee now lives in CI, which builds with `-Xswiftc -application-extension`, and
+        // in the consumers, whose extension targets already set APPLICATION_EXTENSION_API_ONLY.
         .target(
             name: "ThreeMFKit",
-            dependencies: ["ZIPFoundation"],
-            swiftSettings: [
-                // Consumed by Quick Look app extensions, so it must stay within the
-                // extension-safe API surface.
-                .unsafeFlags(["-application-extension"])
-            ]
+            dependencies: ["ZIPFoundation"]
         ),
         .testTarget(
             name: "ThreeMFKitTests",

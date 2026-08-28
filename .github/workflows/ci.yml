@@ -27,5 +27,12 @@ jobs:
       - name: Build
         run: swift build
 
+      # The module is linked by Quick Look app extensions, so it must stay inside the API surface
+      # an extension may use. This was previously asserted with .unsafeFlags in Package.swift,
+      # which SwiftPM forbids for a versioned remote dependency; asserting it here keeps the
+      # guarantee without making the package unusable by its consumers.
+      - name: Build as extension-safe
+        run: swift build -Xswiftc -application-extension
+
       - name: Test
         run: swift test
