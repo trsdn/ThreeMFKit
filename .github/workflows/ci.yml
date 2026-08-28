@@ -24,6 +24,11 @@ jobs:
         with:
           xcode-version: latest-stable
 
+      - name: Lint
+        run: |
+          brew install swiftlint
+          swiftlint lint --reporter github-actions-logging
+
       - name: Build
         run: swift build
 

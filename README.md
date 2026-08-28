@@ -33,6 +33,11 @@ Pass `maxPixelDimension:` to bound the returned image:
 extractor.preview(for: url, maxPixelDimension: 512)
 ```
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/stats/repo-card-dark.svg">
+  <img alt="Repository activity for trsdn/ThreeMFKit" src=".github/stats/repo-card.svg" width="480">
+</picture>
+
 ## What it does
 
 - **Picks the right preview.** Slicers embed plate renders, per-object picks and thumbnails side by

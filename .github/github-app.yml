@@ -1,0 +1,42 @@
+# Repository configuration for the GitHub Copilot app.
+#
+# G08: this exists so the behaviour is a decision rather than an inherited default.
+
+instructions: |
+  A Swift package, roughly 400 lines, that reads .3mf packages and extracts a preview image. No
+  application, no UI, no network.
+
+  Validate with `swift build && swift test`. That is all CI runs.
+
+  This parses untrusted input: a .3mf arrives from the internet and, through the Quick Look
+  extensions in trsdn/threemf-quicklook, is opened by merely selecting it in Finder. Any new
+  parsing path needs a test for the malformed case, not only the well-formed one.
+
+  The uncompressed-size ceiling is checked twice on purpose -- once against the declared size in
+  the archive metadata, once against a running total while decompressing, because the declared
+  size can lie. Do not simplify it to one check.
+
+  When writing a test fixture, ZIPFoundation's addEntry stores uncompressed by default. A
+  "decompression bomb" fixture built without compressionMethod: .deflate is not compressed at all
+  and proves nothing.
+
+  Do not put -application-extension back into Package.swift as .unsafeFlags. SwiftPM refuses to
+  resolve a package using unsafe flags when it is depended on by version, which makes this package
+  unusable by every consumer outside this repository. CI asserts it instead.
+
+  The README example is compiled by READMEExampleTests, so renaming a public symbol means updating
+  the README in the same change.
+
+scripts:
+  - name: Build and test
+    command: swift build && swift test
+
+  - name: Verify extension-safe
+    command: swift build -Xswiftc -application-extension
+
+# A library; there is nothing to open.
+auto_open_in_browser: false
+
+automation:
+  auto_issue_session: true
+  remote_control: false
